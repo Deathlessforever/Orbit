@@ -4,7 +4,7 @@
 
 Orbit is an ambitious, mobile-first personal messaging project built to compete on the qualities that make people trust a messenger: dependable delivery, privacy, a calm premium experience, and useful communication across weak or missing connectivity.
 
-> **Current stage:** early foundation. This repository is not yet a working messenger. Features are only considered complete when implemented, tested, and documented.
+> **Current stage:** local Android prototype. You can create conversations and save messages on one device. This is not yet an online or phone-to-phone messenger. Features are only considered complete when implemented, tested, and documented.
 
 ## Product direction
 
@@ -45,7 +45,20 @@ See [Product specification](docs/PRODUCT_SPEC.md) and [Security model](docs/SECU
 
 ## Development status
 
-This is an early-stage project. No production-ready messaging, encryption, calling, or offline relay should be assumed to exist until the relevant code, tests, and release evidence are present.
+### Implemented in the current development branch
+- Android Jetpack Compose application shell and conversation list.
+- Local conversation creation, local message entry, and history persistence using Android SharedPreferences.
+- Input validation for message IDs, conversation IDs, sender IDs, body length, and timestamps.
+- Message lifecycle transition rules and unit tests.
+- GitHub Actions workflow for Android build and unit-test tasks.
+
+### Not implemented yet
+- Remote accounts, identity verification, server/API, or messages delivered to another phone.
+- End-to-end encryption or encrypted local storage. **Do not use this prototype for sensitive messages.**
+- Group synchronization, attachments, voice/video calls, push notifications, and offline phone-to-phone transport.
+- Physical-device verification and production security review.
+
+Local storage is an engineering slice for testing the app flow, not a secure messenger. A green CI run verifies only the tasks it actually executes; it does not establish production readiness.
 
 ## Contributing
 
