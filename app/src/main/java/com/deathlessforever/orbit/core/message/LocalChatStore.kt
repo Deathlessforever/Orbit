@@ -44,6 +44,12 @@ class LocalChatStore(context: Context) {
     @Synchronized
     fun delete(id: String): Result<Unit> = save(all().filterNot { it.id == id })
 
+    /** Permanently removes all local conversations from this app installation. */
+    @Synchronized
+    fun clearAll(): Result<Unit> = runCatching {
+        check(prefs.edit().remove("conversations").commit()) { "Local data deletion failed" }
+    }
+
     private fun save(items: List<LocalConversation>): Result<Unit> = runCatching {
         val array = JSONArray()
         items.forEach { item ->
