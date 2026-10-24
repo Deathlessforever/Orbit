@@ -55,6 +55,8 @@ private fun OrbitHome(store: LocalChatStore) {
     var newChat by remember { mutableStateOf(false) }
     var contactName by remember { mutableStateOf("") }
     var settings by remember { mutableStateOf(false) }
+    var showClearConfirmation by remember { mutableStateOf(false) }
+    var clearError by remember { mutableStateOf<String?>(null) }
     var selectedId by remember { mutableStateOf<String?>(null) }
     var conversations by remember { mutableStateOf(store.all()) }
     var refreshToken by remember { mutableIntStateOf(0) }
@@ -160,6 +162,9 @@ private fun OrbitHome(store: LocalChatStore) {
                         Text("Local conversations and message history are saved on this device.", color = Muted)
                         Text("Not implemented: accounts, network delivery, end-to-end encryption, media, group sync, calls, and phone-to-phone offline transport.", color = Muted)
                         Text("Storage note: local prototype data is not encrypted. Do not use it for sensitive messages.", color = Color(0xFFB42318))
+                        Text("Privacy control: you can permanently clear all conversations stored by this installation.", color = Muted)
+                        if (clearError != null) Text(clearError!!, color = Color(0xFFB42318))
+                        OutlinedButton(onClick = { clearError = null; showClearConfirmation = true }) { Text("Delete all local data") }
                         Button(onClick = { settings = false }) { Text("Back to chats") }
                     }
                 }
@@ -221,6 +226,30 @@ private fun OrbitHome(store: LocalChatStore) {
                 }
             }
         }
+    }
+
+    if (showClearConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showClearConfirmation = false },
+            title = { Text("Delete all local data?") },
+            text = { Text("This permanently deletes every conversation and saved message on this device. It cannot be undone.") },
+            confirmButton = {
+                TextButton(onClick = {
+                    val result = store.clearAll()
+                    if (result.isSuccess) {
+                        refreshToken++
+                        selectedId = null
+                        settings = false
+                        clearError = null
+                        showClearConfirmation = false
+                    } else {
+                        clearError = result.exceptionOrNull()?.message ?: "Could not delete local data."
+                        showClearConfirmation = false
+                    }
+                }) { Text("Delete permanently", color = Color(0xFFB42318)) }
+            },
+            dismissButton = { TextButton(onClick = { showClearConfirmation = false }) { Text("Cancel") } }
+        )
     }
 
     if (newChat) {
