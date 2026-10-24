@@ -41,13 +41,15 @@ Orbit aims to bring together:
 
 The first release should prioritize a native Android client and a small, documented service API. Keep the transport interface modular so online delivery and nearby delivery can share message IDs, acknowledgements, expiry, and deduplication rules. Choose backend and cryptographic dependencies only after recording the trade-offs in the architecture decision records.
 
-See [Product specification](docs/PRODUCT_SPEC.md) and [Security model](docs/SECURITY_MODEL.md).
+See [Product specification](docs/PRODUCT_SPEC.md), [Security model](docs/SECURITY_MODEL.md), [public release plan](docs/RELEASE_PLAN.md), and [privacy notice draft](docs/PRIVACY_NOTICE_DRAFT.md).
 
 ## Development status
 
 ### Implemented in the current development branch
 - Android Jetpack Compose application shell and conversation list.
 - Local conversation creation, local message entry, and history persistence using Android SharedPreferences.
+- User-initiated deletion of all locally stored conversations with a confirmation step.
+- Android build configured for API 36, with CI using a compatible Android Gradle Plugin/Gradle pair.
 - Input validation for message IDs, conversation IDs, sender IDs, body length, and timestamps.
 - Message lifecycle transition rules and unit tests.
 - GitHub Actions workflow for Android build and unit-test tasks.
